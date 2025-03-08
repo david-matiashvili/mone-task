@@ -9,7 +9,6 @@ import { Response } from "express"
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
-  @UsePipes(new ValidationPipe())
   @Post('login')
   @HttpCode(200)
   async login(@Body() data: LoginUserDto, @Res({ passthrough: true }) res: Response) {
@@ -24,8 +23,7 @@ export class AuthController {
 
     return new SuccessResponse("Logined successfully!", { token });
   }
-
-  @UsePipes(new ValidationPipe())
+  
   @Post('register')
   @HttpCode(201)
   async register(@Body() data: RegisterUserDto): Promise<SuccessResponse<null>> {

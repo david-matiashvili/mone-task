@@ -8,7 +8,6 @@ import { RegisterUserDto } from './dto/register_user.dto';
 import { LoginUserDto } from './dto/login_user.dto';
 
 import { JwtService } from '@nestjs/jwt';
-import { log } from 'console';
 
 
 
@@ -28,7 +27,7 @@ export class AuthService {
         const { email, first_name, last_name, age, password } = data;
         const hashedPass = await this.hashPassword(password);
 
-        const sameEmailUser = await this.userService.findOne(email);
+        const sameEmailUser = await this.userService.findByEmail(email);
 
         if (sameEmailUser) throw new BadRequestException("User with this email exists!");
 
@@ -44,7 +43,7 @@ export class AuthService {
     async login(data: LoginUserDto) {
         const { email, password } = data;
 
-        const user = await this.userService.findOne(email);
+        const user = await this.userService.findByEmail(email);
         if (!user) throw new NotFoundException("User not found! Email or password is incorrect.");
 
         const isMatch = await compare(password, user.password);
